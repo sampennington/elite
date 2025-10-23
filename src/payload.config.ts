@@ -17,6 +17,8 @@ import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 
+console.log('process.env.DATABASE_URI', process.env.DATABASE_URI)
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
