@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@payloadcms/admin-bar": "3.60.0",
+    "@payloadcms/db-postgres": "3.60.0",
     "@payloadcms/live-preview-react": "3.60.0",
     "@payloadcms/next": "3.60.0",
     "@payloadcms/payload-cloud": "3.60.0",
@@ -47,14 +48,17 @@
     "next": "15.4.4",
     "next-sitemap": "^4.2.3",
     "payload": "3.60.0",
+    "posthog-js": "^1.280.1",
+    "posthog-node": "^5.10.3",
     "prism-react-renderer": "^2.3.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "7.45.4",
+    "recharts": "^3.3.0",
     "sharp": "0.34.2",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "@payloadcms/db-postgres": "3.60.0"
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
