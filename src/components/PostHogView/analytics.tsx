@@ -1,14 +1,15 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
-  formatNumber,
-  formatDuration,
-  formatPercentage,
   type PostHogData,
-} from '@/lib/posthog'
+  type PageData,
+  type SourceData,
+  type EventData,
+  TimePeriod,
+} from '@/lib/analytics/posthog'
 import { SelectInput } from '@payloadcms/ui'
-import type { OptionObject } from 'payload'
+import type { Option, OptionObject } from 'payload'
 import { AnalyticsCard } from '@/components/AnalyticsCard'
 import { Table } from '@/components/Table'
 import {
@@ -20,69 +21,15 @@ import {
   Area,
   AreaChart,
 } from 'recharts'
+import { formatAxisDate, formatTooltipDate } from './utils'
+import { formatNumber, formatPercentage, formatDuration } from '@/lib/analytics/utils'
+import { useAnalytics } from '@/lib/analytics/use-analytics'
 
-// Format dates for the x-axis based on the period
-function formatAxisDate(
-  dateStr: string,
-  period: string,
-  _index?: number,
-  _total?: number,
-): string {
-  const date = new Date(dateStr)
 
-  if (period === 'day') {
-    return date.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true })
-  } else if (period === '12mo') {
-    const month = date.getMonth()
-    if (month === 0) {
-      return date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
-    }
-    return date.toLocaleDateString('en-US', { month: 'short' })
-  } else if (period === '30d') {
-    return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' })
-  } else {
-    return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' })
-  }
-}
+export const Analytics: React.FC = () => {
+  const [period, setPeriod] = useState<TimePeriod>('7d')
 
-// Format dates for tooltips with details
-function formatTooltipDate(dateStr: string, period: string): string {
-  const date = new Date(dateStr)
-  if (period === 'day') {
-    return (
-      date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) +
-      ' at ' +
-      date.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true })
-    )
-  } else {
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-  }
-}
-
-export const AnalyticsClient: React.FC = () => {
-  const [data, setData] = useState<PostHogData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [period, setPeriod] = useState('7d')
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
-      try {
-        const response = await fetch(`/api/analytics/detailed?period=${period}`)
-        if (!response.ok) {
-          throw new Error('Failed to fetch analytics data')
-        }
-        const analyticsData = await response.json()
-        setData(analyticsData)
-      } catch (e) {
-        setError(e instanceof Error ? e.message : 'An error occurred')
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-  }, [period])
+  const {loading, data, error } = useAnalytics({ period })
 
   if (loading) {
     return <div>Loading analytics...</div>
@@ -92,7 +39,7 @@ export const AnalyticsClient: React.FC = () => {
     return <div>{error || 'Unable to load analytics data'}</div>
   }
 
-  const { stats, timeseries, pages, sources, events, realtime } = data
+  const { stats, timeseries, pages, sources, events } = data
 
   const options = [
     { value: 'day', label: 'Last 24 hours' },
@@ -110,32 +57,11 @@ export const AnalyticsClient: React.FC = () => {
           label={'Time Period:'}
           options={options}
           value={period}
-          onChange={(period) => setPeriod((period as OptionObject).value)}
+          onChange={(option) => !Array.isArray(option) && setPeriod((option).value as TimePeriod)}
         />
       </div>
       <div className="dashboard__group">
         <h2 className="dashboard__label">Overview</h2>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1rem',
-            marginBottom: '1rem',
-            fontSize: '1rem',
-          }}
-        >
-          <span
-            style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              backgroundColor: realtime.visitors > 0 ? '#10b981' : '#666',
-            }}
-          />
-          <span>
-            {realtime.visitors} visitor{realtime.visitors !== 1 ? 's' : ''} online now
-          </span>
-        </div>
         <ul className="dashboard__card-list" style={{ marginBottom: '2rem' }}>
           <AnalyticsCard
             title={'Visitors'}
@@ -234,7 +160,7 @@ export const AnalyticsClient: React.FC = () => {
 
       <div className="dashboard__group">
         {pages.length > 0 && (
-          <Table
+          <Table<PageData>
             title="Top Pages"
             columns={[
               { key: 'page', label: 'Page' },
@@ -246,7 +172,7 @@ export const AnalyticsClient: React.FC = () => {
           />
         )}
         {sources.length > 0 && (
-          <Table
+          <Table<SourceData>
             title="Top Sources"
             columns={[
               { key: 'source', label: 'Source' },
@@ -258,7 +184,7 @@ export const AnalyticsClient: React.FC = () => {
           />
         )}
         {events && events.length > 0 && (
-          <Table
+          <Table<EventData>
             title="Custom Events"
             columns={[
               { key: 'event', label: 'Event' },

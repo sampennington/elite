@@ -1,5 +1,5 @@
 import React from 'react'
-import { AnalyticsClient } from './index.client'
+import { Analytics } from './analytics'
 import { DefaultTemplate } from '@payloadcms/next/templates'
 import { Gutter, type StepNavItem, SetStepNav } from '@payloadcms/ui'
 import type { AdminViewServerProps } from 'payload'
@@ -34,7 +34,7 @@ export const AnalyticsView: React.FC<AdminViewServerProps> = ({
       <SetStepNav nav={steps} />
       <Gutter>
         <h1 style={{ margin: '1rem 0 2rem' }}>Analytics Dashboard</h1>
-        <AnalyticsClient />
+        <Analytics />
       </Gutter>
     </DefaultTemplate>
   )

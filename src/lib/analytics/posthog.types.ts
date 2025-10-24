@@ -1,13 +1,3 @@
-/**
- * PostHog API Types
- *
- * Type definitions for PostHog API requests and responses
- */
-
-// ============================================================================
-// API Response Types
-// ============================================================================
-
 export interface PostHogTrendResponse {
   result: PostHogTrendResult[]
   next?: string
@@ -62,10 +52,6 @@ export interface PostHogElement {
   attributes: Record<string, string>
 }
 
-// ============================================================================
-// Our Application Types
-// ============================================================================
-
 export interface TimePeriodData {
   date: string
   visitors: number
@@ -80,6 +66,7 @@ export interface PageData {
   pageviews: number
   bounce_rate: number
   visit_duration: number
+  [key: string]: string | number
 }
 
 export interface SourceData {
@@ -87,12 +74,14 @@ export interface SourceData {
   visitors: number
   bounce_rate: number
   visit_duration: number
+  [key: string]: string | number
 }
 
 export interface EventData {
   event: string
   count: number
   unique_users: number
+  [key: string]: string | number
 }
 
 export interface StatsData {
@@ -108,7 +97,6 @@ export interface PostHogData {
   pages: PageData[]
   sources: SourceData[]
   events: EventData[]
-  realtime: { visitors: number }
 }
 
 // ============================================================================

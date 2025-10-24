@@ -1,11 +1,11 @@
+import { formatChange } from '@/lib/analytics/utils'
 import React from 'react'
-import { formatChange } from '@/lib/posthog'
 
 interface AnalyticsCardProps {
   title: string
-  value: string | number
+  value:  number
   change?: number | null
-  formatter?: (value: string | number) => string
+  formatter?: (value: number) => string
   positiveIsGood?: boolean
 }
 
