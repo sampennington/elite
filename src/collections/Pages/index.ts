@@ -12,6 +12,7 @@ import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
+// import { autoTranslate } from './hooks/autoTranslate' // Uncomment to enable auto-translation
 
 import {
   MetaDescriptionField,
@@ -59,6 +60,7 @@ export const Pages: CollectionConfig<'pages'> = {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       type: 'tabs',
@@ -120,7 +122,10 @@ export const Pages: CollectionConfig<'pages'> = {
     slugField(),
   ],
   hooks: {
-    afterChange: [revalidatePage],
+    afterChange: [
+      revalidatePage,
+      // autoTranslate, // Uncomment to enable auto-translation
+    ],
     beforeChange: [populatePublishedAt],
     afterDelete: [revalidateDelete],
   },
