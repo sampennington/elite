@@ -1,6 +1,6 @@
-# PostHog Analytics Plugin for Payload CMS
+# payload-posthog-analytics
 
-A comprehensive analytics dashboard plugin for Payload CMS with PostHog integration. This plugin adds a beautiful analytics view to your Payload admin panel, showing visitor stats, page views, traffic sources, and custom events.
+A comprehensive analytics dashboard plugin for Payload CMS with PostHog integration. Adds a beautiful analytics view to your Payload admin panel with visitor stats, page views, traffic sources, and custom events.
 
 ## Features
 
@@ -19,15 +19,17 @@ A comprehensive analytics dashboard plugin for Payload CMS with PostHog integrat
 
 ## Installation
 
-### 1. Install Dependencies
-
-This plugin requires PostHog client libraries:
-
 ```bash
-pnpm add posthog-js posthog-node recharts
+npm install payload-posthog-analytics
+# or
+pnpm add payload-posthog-analytics
+# or
+yarn add payload-posthog-analytics
 ```
 
-### 2. Configure Environment Variables
+## Setup
+
+### 1. Configure Environment Variables
 
 Add these variables to your `.env` file:
 
@@ -39,46 +41,48 @@ POSTHOG_API_HOST=https://app.posthog.com  # Optional, defaults to this value
 
 **Note:** You need a PostHog **Personal API Key** (not the public token) to fetch analytics data. Get it from PostHog Settings → Personal API Keys.
 
-### 3. Add Plugin to Payload Config
+### 2. Add Plugin to Payload Config
 
-In your `src/plugins/index.ts`:
+In your `payload.config.ts`:
 
 ```typescript
-import { analyticsPlugin } from './analytics'
+import { analyticsPlugin } from 'payload-posthog-analytics'
 
-export const plugins: Plugin[] = [
-  // ... other plugins
-  analyticsPlugin({
-    adminView: {
-      path: '/analytics',
-      label: 'Analytics',
-    },
-  }),
-]
+export default buildConfig({
+  plugins: [
+    analyticsPlugin({
+      adminView: {
+        path: '/analytics',
+        label: 'Analytics',
+      },
+    }),
+    // ... other plugins
+  ],
+})
 ```
 
-### 4. Configure Next.js Rewrites
+### 3. Configure Next.js Rewrites (Optional but Recommended)
 
-In your `next.config.js`:
+To bypass ad blockers, add the reverse proxy to your `next.config.js`:
 
 ```javascript
-import { getAnalyticsRewrites } from './src/plugins/analytics/index.ts'
+import { getAnalyticsRewrites } from 'payload-posthog-analytics'
 
 const nextConfig = {
   async rewrites() {
     return getAnalyticsRewrites()
   },
 }
+
+export default nextConfig
 ```
 
-This sets up a reverse proxy to bypass ad blockers.
-
-### 5. Generate Import Map
+### 4. Regenerate Import Map
 
 After adding the plugin, regenerate your Payload import map:
 
 ```bash
-pnpm generate:importmap
+pnpm payload generate:importmap
 ```
 
 ## Usage
@@ -110,9 +114,29 @@ interface AnalyticsPluginOptions {
 }
 ```
 
-## API Endpoint
+### Example with Custom Options
 
-The plugin automatically adds a Payload REST endpoint:
+```typescript
+analyticsPlugin({
+  enabled: process.env.NODE_ENV === 'production',
+  posthog: {
+    projectId: process.env.POSTHOG_PROJECT_ID,
+    apiKey: process.env.POSTHOG_API_KEY,
+    apiHost: 'https://eu.posthog.com', // EU region
+  },
+  adminView: {
+    path: '/dashboard/analytics',
+    label: 'Site Analytics',
+  },
+  reverseProxy: {
+    ingestPath: '/ph',
+  },
+})
+```
+
+## API
+
+The plugin automatically adds a REST endpoint to your Payload app:
 
 ```
 GET /api/analytics/data?period=7d
@@ -126,75 +150,58 @@ GET /api/analytics/data?period=7d
 {
   "stats": {
     "visitors": { "value": 1234, "change": null },
-    "pageviews": { "value": 5678, "change": null },
-    "bounce_rate": { "value": 0, "change": null },
-    "visit_duration": { "value": 0, "change": null }
+    "pageviews": { "value": 5678, "change": null }
   },
   "timeseries": [
     { "date": "2024-10-21T00:00:00Z", "visitors": 123 }
   ],
-  "pages": [
-    { "page": "/home", "visitors": 100, "pageviews": 150, "bounce_rate": 0, "visit_duration": 0 }
-  ],
-  "sources": [
-    { "source": "google.com", "visitors": 50, "bounce_rate": 0, "visit_duration": 0 }
-  ],
-  "events": [
-    { "event": "button_click", "count": 25, "unique_users": 20 }
-  ]
+  "pages": [...],
+  "sources": [...],
+  "events": [...]
 }
 ```
 
-## Exporting as npm Package
+## TypeScript
 
-To share this plugin across multiple projects:
+This package includes TypeScript definitions. Import types like this:
 
-1. Move the `src/plugins/analytics` folder to a new package
-2. Create a `package.json`:
-
-```json
-{
-  "name": "@your-org/payload-posthog-analytics",
-  "version": "1.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "peerDependencies": {
-    "payload": "^3.0.0",
-    "posthog-js": "^1.0.0",
-    "posthog-node": "^4.0.0",
-    "recharts": "^2.0.0"
-  }
-}
+```typescript
+import type {
+  AnalyticsPluginOptions,
+  PostHogData,
+  TimePeriod
+} from 'payload-posthog-analytics'
 ```
 
-3. Publish to npm
-4. Install in other projects:
+## Requirements
 
-```bash
-npm install @your-org/payload-posthog-analytics
-```
+- Payload CMS ^3.0.0
+- React ^18.0.0 or ^19.0.0
+- PostHog account with Personal API Key
 
-## Directory Structure
+## Troubleshooting
 
-```
-src/plugins/analytics/
-├── index.ts                    # Plugin entry point
-├── types.ts                    # TypeScript types
-├── README.md                   # Documentation
-├── lib/
-│   ├── posthog-api-client.ts  # PostHog API client
-│   ├── posthog.ts             # Data fetching logic
-│   ├── posthog.types.ts       # API types
-│   ├── utils.ts               # Utility functions
-│   └── use-analytics.ts       # React hook
-├── components/
-│   ├── AnalyticsView.tsx      # Admin view wrapper
-│   ├── AnalyticsDashboard.tsx # Dashboard UI
-│   └── utils.ts               # Component utils
-└── endpoints/
-    └── data.ts                # Payload endpoint
-```
+### Analytics not showing
+- Verify your `POSTHOG_API_KEY` and `POSTHOG_PROJECT_ID` are correct
+- Check browser console for errors
+- Ensure you're using a **Personal API Key**, not the public project key
+
+### Ad blockers blocking requests
+- Make sure you've configured the reverse proxy in `next.config.js`
+- Test with ad blocker disabled to confirm
+
+### Import errors
+- Run `pnpm payload generate:importmap` after installation
+- Restart your dev server
+
+## Contributing
+
+Contributions are welcome! Please open an issue or pull request.
 
 ## License
 
-This plugin is part of your Payload CMS project and follows the same license.
+MIT
+
+## Credits
+
+Built for Payload CMS with ❤️

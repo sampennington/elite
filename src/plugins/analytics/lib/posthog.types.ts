@@ -55,25 +55,18 @@ export interface PostHogElement {
 export interface TimePeriodData {
   date: string
   visitors: number
-  pageviews?: number
-  bounce_rate?: number
-  visit_duration?: number
 }
 
 export interface PageData {
   page: string
   visitors: number
   pageviews: number
-  bounce_rate: number
-  visit_duration: number
   [key: string]: string | number
 }
 
 export interface SourceData {
   source: string
   visitors: number
-  bounce_rate: number
-  visit_duration: number
   [key: string]: string | number
 }
 
@@ -87,8 +80,6 @@ export interface EventData {
 export interface StatsData {
   visitors: { value: number; change: number | null }
   pageviews: { value: number; change: number | null }
-  bounce_rate: { value: number; change: number | null }
-  visit_duration: { value: number; change: number | null }
 }
 
 export interface PostHogData {

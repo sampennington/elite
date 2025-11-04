@@ -1,6 +1,6 @@
 import { Endpoint } from 'payload'
-import { getPostHogData } from '@/plugins/analytics/lib/posthog'
-import { TimePeriod } from '@/plugins/analytics/lib/posthog.types'
+import { getPostHogData } from '../lib/posthog'
+import { TimePeriod } from '../lib/posthog.types'
 
 export const analyticsDataEndpoint: Endpoint = {
   path: '/analytics/data',

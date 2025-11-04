@@ -1,4 +1,4 @@
-import { formatChange } from '@/lib/analytics/utils'
+import { formatChange } from '../lib/utils'
 import React from 'react'
 
 interface AnalyticsCardProps {

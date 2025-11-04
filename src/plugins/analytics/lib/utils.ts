@@ -1,4 +1,4 @@
-import { TimePeriod, DateRange } from "@/plugins/analytics/lib/posthog.types"
+import { TimePeriod, DateRange } from "./posthog.types"
 
 export function getDateRange(period: TimePeriod): DateRange {
   const now = new Date()
@@ -37,19 +37,6 @@ export function formatNumber(num: number): string {
     return `${(num / 1000).toFixed(1)}K`
   }
   return num.toString()
-}
-
-export function formatDuration(seconds: number): string {
-  if (seconds < 60) {
-    return `${Math.round(seconds)}s`
-  }
-  const minutes = Math.floor(seconds / 60)
-  const remainingSeconds = Math.round(seconds % 60)
-  return remainingSeconds > 0 ? `${minutes}m ${remainingSeconds}s` : `${minutes}m`
-}
-
-export function formatPercentage(value: number): string {
-  return `${Math.round(value)}%`
 }
 
 export function formatChange(change: number | null): { text: string; isPositive: boolean } {

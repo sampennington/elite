@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { TimePeriod, PostHogData } from '@/plugins/analytics/lib/posthog.types'
+import { TimePeriod, PostHogData } from './posthog.types'
 
 interface UseAnalyticsOptions {
   period?: TimePeriod
@@ -27,10 +27,12 @@ export const useAnalytics = (options: UseAnalyticsOptions = {}): UseAnalyticsRes
     setError(null)
     try {
       const response = await fetch(`/api/analytics/data?period=${period}`)
+
       if (!response.ok) {
         throw new Error('Failed to fetch analytics data')
       }
       const analyticsData = await response.json()
+      console.log({analyticsData})
       setData(analyticsData)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'An error occurred')

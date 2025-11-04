@@ -11,7 +11,7 @@ import type {
   TrendQuery,
   PostHogTrendResponse,
   PostHogEventsResponse,
-} from '@/plugins/analytics/lib/posthog.types'
+} from './posthog.types'
 
 export class PostHogAPIClient {
   private config: PostHogConfig

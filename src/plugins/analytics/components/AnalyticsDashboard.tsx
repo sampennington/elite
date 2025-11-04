@@ -2,16 +2,14 @@
 
 import React, { useState } from 'react'
 import {
-  type PostHogData,
   type PageData,
   type SourceData,
   type EventData,
   TimePeriod,
-} from '@/plugins/analytics/lib/posthog.types'
+} from '../lib/posthog.types'
 import { SelectInput } from '@payloadcms/ui'
-import type { Option, OptionObject } from 'payload'
-import { AnalyticsCard } from '@/components/AnalyticsCard'
-import { Table } from '@/components/Table'
+import { AnalyticsCard } from './AnalyticsCard'
+import { Table } from './Table'
 import {
   XAxis,
   YAxis,
@@ -21,9 +19,9 @@ import {
   Area,
   AreaChart,
 } from 'recharts'
-import { formatAxisDate, formatTooltipDate } from '@/plugins/analytics/components/utils'
-import { formatNumber, formatPercentage, formatDuration } from '@/plugins/analytics/lib/utils'
-import { useAnalytics } from '@/plugins/analytics/lib/use-analytics'
+import { formatAxisDate, formatTooltipDate } from './utils'
+import { formatNumber } from '../lib/utils'
+import { useAnalytics } from '../lib/use-analytics'
 
 
 export const AnalyticsDashboard: React.FC = () => {
@@ -75,20 +73,6 @@ export const AnalyticsDashboard: React.FC = () => {
             value={stats.pageviews.value}
             change={stats.pageviews.change}
             formatter={formatNumber}
-            positiveIsGood={true}
-          />
-          <AnalyticsCard
-            title={'Bounce Rate'}
-            value={stats.bounce_rate.value}
-            change={stats.bounce_rate.change}
-            formatter={formatPercentage}
-            positiveIsGood={false}
-          />
-          <AnalyticsCard
-            title={'Visit Duration'}
-            value={stats.visit_duration.value}
-            change={stats.visit_duration.change}
-            formatter={formatDuration}
             positiveIsGood={true}
           />
         </ul>
@@ -166,7 +150,6 @@ export const AnalyticsDashboard: React.FC = () => {
               { key: 'page', label: 'Page' },
               { key: 'visitors', label: 'Visitors', formatter: formatNumber },
               { key: 'pageviews', label: 'Pageviews', formatter: formatNumber },
-              { key: 'bounce_rate', label: 'Bounce Rate', formatter: formatPercentage },
             ]}
             rows={pages}
           />
@@ -177,8 +160,6 @@ export const AnalyticsDashboard: React.FC = () => {
             columns={[
               { key: 'source', label: 'Source' },
               { key: 'visitors', label: 'Visitors', formatter: formatNumber },
-              { key: 'bounce_rate', label: 'Bounce Rate', formatter: formatPercentage },
-              { key: 'visit_duration', label: 'Visit Duration', formatter: formatDuration },
             ]}
             rows={sources}
           />

@@ -1,4 +1,4 @@
-import { createPostHogAPIClient } from '@/plugins/analytics/lib/posthog-api-client'
+import { createPostHogAPIClient } from './posthog-api-client'
 import type {
   TimePeriodData,
   PageData,
@@ -9,8 +9,8 @@ import type {
   TimePeriod,
   PostHogTrendResult,
   PostHogEvent,
-} from '@/plugins/analytics/lib/posthog.types'
-import { getDateRange } from '@/plugins/analytics/lib/utils'
+} from './posthog.types'
+import { getDateRange } from './utils'
 
 export type {
   TimePeriodData,
@@ -44,6 +44,8 @@ export async function getPostHogData(period: TimePeriod = '7d'): Promise<PostHog
         client.getEvents(),
       ])
 
+      console.log({visitorsData, pageviewsData, topPagesData, sourcesData, eventsData})
+
     const timeseries: TimePeriodData[] =
       visitorsData?.result?.[0]?.data?.map((value: number, index: number) => ({
         date: visitorsData.result[0].labels[index],
@@ -57,8 +59,6 @@ export async function getPostHogData(period: TimePeriod = '7d'): Promise<PostHog
     const stats: StatsData = {
       visitors: { value: totalVisitors, change: null },
       pageviews: { value: totalPageviews, change: null },
-      bounce_rate: { value: 0, change: null },
-      visit_duration: { value: 0, change: null },
     }
 
     const pages: PageData[] =
@@ -66,16 +66,12 @@ export async function getPostHogData(period: TimePeriod = '7d'): Promise<PostHog
         page: item.breakdown_value || 'Unknown',
         visitors: item.count || 0,
         pageviews: item.count || 0,
-        bounce_rate: 0,
-        visit_duration: 0,
       })) || []
 
     const sources: SourceData[] =
       sourcesData?.result?.slice(0, 10).map((item: PostHogTrendResult) => ({
         source: item.breakdown_value || 'Direct',
         visitors: item.count || 0,
-        bounce_rate: 0,
-        visit_duration: 0,
       })) || []
 
     const events: EventData[] =

@@ -29,7 +29,7 @@ export type {
   StatsData,
   PostHogData,
   TimePeriod,
-} from '@/plugins/analytics/lib/posthog.types'
+} from './lib/posthog.types'
 
 /**
  * PostHog Analytics Plugin for Payload CMS
