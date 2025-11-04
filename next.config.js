@@ -1,4 +1,5 @@
 import { withPayload } from '@payloadcms/next/withPayload'
+import { getAnalyticsRewrites } from './src/plugins/analytics/index.ts'
 
 import redirects from './redirects.js'
 
@@ -31,18 +32,8 @@ const nextConfig = {
   },
   reactStrictMode: true,
   redirects,
-  // PostHog reverse proxy to bypass ad blockers
   async rewrites() {
-    return [
-      {
-        source: '/ingest/static/:path*',
-        destination: 'https://us-assets.i.posthog.com/static/:path*',
-      },
-      {
-        source: '/ingest/:path*',
-        destination: 'https://us.i.posthog.com/:path*',
-      },
-    ]
+    return getAnalyticsRewrites()
   },
 }
 

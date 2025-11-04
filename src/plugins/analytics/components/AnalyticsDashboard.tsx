@@ -7,7 +7,7 @@ import {
   type SourceData,
   type EventData,
   TimePeriod,
-} from '@/lib/analytics/posthog'
+} from '@/plugins/analytics/lib/posthog.types'
 import { SelectInput } from '@payloadcms/ui'
 import type { Option, OptionObject } from 'payload'
 import { AnalyticsCard } from '@/components/AnalyticsCard'
@@ -21,12 +21,12 @@ import {
   Area,
   AreaChart,
 } from 'recharts'
-import { formatAxisDate, formatTooltipDate } from './utils'
-import { formatNumber, formatPercentage, formatDuration } from '@/lib/analytics/utils'
-import { useAnalytics } from '@/lib/analytics/use-analytics'
+import { formatAxisDate, formatTooltipDate } from '@/plugins/analytics/components/utils'
+import { formatNumber, formatPercentage, formatDuration } from '@/plugins/analytics/lib/utils'
+import { useAnalytics } from '@/plugins/analytics/lib/use-analytics'
 
 
-export const Analytics: React.FC = () => {
+export const AnalyticsDashboard: React.FC = () => {
   const [period, setPeriod] = useState<TimePeriod>('7d')
 
   const {loading, data, error } = useAnalytics({ period })

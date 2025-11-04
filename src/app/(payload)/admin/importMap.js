@@ -24,7 +24,7 @@ import { RowLabel as RowLabel_1f6ff6ff633e3695d348f4f3c58f1466 } from '@/Footer/
 import { default as default_6899353875176ac970cd12104fdb4ffd } from '@/components/AfterNavLinks/index.tsx'
 import { default as default_1a7510af427896d367a49dbf838d2de6 } from '@/components/BeforeDashboard'
 import { default as default_8a7ab0eb7ab5c511aba12e68480bfe5e } from '@/components/BeforeLogin'
-import { AnalyticsView as AnalyticsView_529a7ef78961b897f015cbde6d658fd5 } from '@/components/PostHogView/index.tsx'
+import { AnalyticsView as AnalyticsView_75e21e4d41203c58fd4bfc666cf6b2d6 } from '@/plugins/analytics/components/AnalyticsView'
 
 export const importMap = {
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -53,5 +53,5 @@ export const importMap = {
   "@/components/AfterNavLinks/index.tsx#default": default_6899353875176ac970cd12104fdb4ffd,
   "@/components/BeforeDashboard#default": default_1a7510af427896d367a49dbf838d2de6,
   "@/components/BeforeLogin#default": default_8a7ab0eb7ab5c511aba12e68480bfe5e,
-  "@/components/PostHogView/index.tsx#AnalyticsView": AnalyticsView_529a7ef78961b897f015cbde6d658fd5
+  "@/plugins/analytics/components/AnalyticsView#AnalyticsView": AnalyticsView_75e21e4d41203c58fd4bfc666cf6b2d6
 }

@@ -1,4 +1,4 @@
-import { createPostHogAPIClient } from './posthog-api-client'
+import { createPostHogAPIClient } from '@/plugins/analytics/lib/posthog-api-client'
 import type {
   TimePeriodData,
   PageData,
@@ -9,8 +9,8 @@ import type {
   TimePeriod,
   PostHogTrendResult,
   PostHogEvent,
-} from './posthog.types'
-import { getDateRange } from './utils'
+} from '@/plugins/analytics/lib/posthog.types'
+import { getDateRange } from '@/plugins/analytics/lib/utils'
 
 export type {
   TimePeriodData,

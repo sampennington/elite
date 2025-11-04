@@ -1,4 +1,4 @@
-import { TimePeriod, DateRange } from "./posthog.types"
+import { TimePeriod, DateRange } from "@/plugins/analytics/lib/posthog.types"
 
 export function getDateRange(period: TimePeriod): DateRange {
   const now = new Date()
