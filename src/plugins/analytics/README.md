@@ -150,7 +150,7 @@ GET /api/analytics/data?period=7d
 {
   "stats": {
     "visitors": { "value": 1234, "change": null },
-    "pageviews": { "value": 5678, "change": null }
+    "pageViews": { "value": 5678, "change": null }
   },
   "timeseries": [
     { "date": "2024-10-21T00:00:00Z", "visitors": 123 }

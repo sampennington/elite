@@ -31,12 +31,20 @@ export class PostHogAPIClient {
    * Fetch trend data (timeseries) from PostHog
    */
   async getTrend(query: TrendQuery): Promise<PostHogTrendResponse | null> {
+    const apiQuery = {
+      events: query.events,
+      date_from: query.dateFrom,
+      date_to: query.dateTo,
+      interval: query.interval,
+      breakdown: query.breakdown,
+    }
+
     const response = await fetch(
       `${this.config.apiHost}/api/projects/${this.config.projectId}/insights/trend/`,
       {
         method: 'POST',
         headers: this.headers,
-        body: JSON.stringify(query),
+        body: JSON.stringify(apiQuery),
         next: { revalidate: 300 },
       },
     )

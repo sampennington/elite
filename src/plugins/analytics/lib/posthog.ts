@@ -10,7 +10,14 @@ import type {
   PostHogTrendResult,
   PostHogEvent,
 } from './posthog.types'
-import { getDateRange } from './utils'
+import {
+  getDateRange,
+  getPreviousPeriodRange,
+  calculateChange,
+  parseTimeseries,
+  getTotalVisitors,
+  extractAggregatedValue,
+} from './utils'
 
 export type {
   TimePeriodData,
@@ -25,7 +32,8 @@ export type {
 
 export async function getPostHogData(period: TimePeriod = '7d'): Promise<PostHogData | null> {
   const client = createPostHogAPIClient()
-  const { date_from, date_to } = getDateRange(period)
+  const dateRange = getDateRange(period)
+  const previousRange = getPreviousPeriodRange(period)
 
   if (!client) {
     return null
@@ -33,40 +41,61 @@ export async function getPostHogData(period: TimePeriod = '7d'): Promise<PostHog
 
   try {
     const interval = period === 'day' ? 'hour' : period === '12mo' ? 'month' : 'day'
-    const dateRange = { date_from, date_to }
 
-    const [visitorsData, pageviewsData, topPagesData, sourcesData, eventsData] =
-      await Promise.all([
-        client.getVisitorsTrend(dateRange, interval),
-        client.getPageviewsTotal(dateRange),
-        client.getTopPages(dateRange),
-        client.getTrafficSources(dateRange),
-        client.getEvents(),
-      ])
+    const [
+      visitorsData,
+      pageViewsData,
+      topPagesData,
+      sourcesData,
+      eventsData,
+      previousVisitorsData,
+      previousPageViewsData,
+    ] = await Promise.all([
+      client.getVisitorsTrend(dateRange, interval),
+      client.getPageviewsTotal(dateRange),
+      client.getTopPages(dateRange),
+      client.getTrafficSources(dateRange),
+      client.getEvents(),
+      client.getVisitorsTrend(previousRange, interval),
+      client.getPageviewsTotal(previousRange),
+    ])
 
-      console.log({visitorsData, pageviewsData, topPagesData, sourcesData, eventsData})
+    console.log({ visitorsData, pageViewsData, topPagesData, sourcesData, eventsData })
 
-    const timeseries: TimePeriodData[] =
-      visitorsData?.result?.[0]?.data?.map((value: number, index: number) => ({
-        date: visitorsData.result[0].labels[index],
-        visitors: value,
-      })) || []
+    const timeseries = parseTimeseries(visitorsData)
+    const totalVisitors = getTotalVisitors(timeseries)
+    const totalPageviews = extractAggregatedValue(pageViewsData)
 
-    const totalVisitors = timeseries.reduce((sum, item) => sum + item.visitors, 0)
-    const totalPageviews =
-      pageviewsData?.result?.[0]?.aggregated_value || pageviewsData?.result?.[0]?.count || 0
+    const previousTimeseries = parseTimeseries(previousVisitorsData)
+    const previousTotalVisitors = getTotalVisitors(previousTimeseries)
+    const previousTotalPageviews = extractAggregatedValue(previousPageViewsData)
 
     const stats: StatsData = {
-      visitors: { value: totalVisitors, change: null },
-      pageviews: { value: totalPageviews, change: null },
+      visitors: {
+        value: totalVisitors,
+        change: calculateChange(totalVisitors, previousTotalVisitors),
+      },
+      pageViews: {
+        value: totalPageviews,
+        change: calculateChange(totalPageviews, previousTotalPageviews),
+      },
     }
 
     const pages: PageData[] =
-      topPagesData?.result?.slice(0, 10).map((item: PostHogTrendResult) => ({
-        page: item.breakdown_value || 'Unknown',
-        visitors: item.count || 0,
-        pageviews: item.count || 0,
-      })) || []
+      topPagesData?.result?.slice(0, 10).map((item: PostHogTrendResult) => {
+        let page = item.breakdown_value || 'Unknown'
+        try {
+          const url = new URL(page)
+          page = url.pathname || '/'
+        } catch {
+          // If it's not a valid URL, keep as is
+        }
+        return {
+          page,
+          visitors: item.count || 0,
+          pageViews: item.count || 0,
+        }
+      }) || []
 
     const sources: SourceData[] =
       sourcesData?.result?.slice(0, 10).map((item: PostHogTrendResult) => ({
@@ -78,7 +107,7 @@ export async function getPostHogData(period: TimePeriod = '7d'): Promise<PostHog
       eventsData?.results?.slice(0, 10).map((item: PostHogEvent) => ({
         event: item.event || 'Unknown',
         count: item.count || 0,
-        unique_users: item.distinct_id_count || 0,
+        uniqueUsers: item.distinct_id_count || 0,
       })) || []
 
     return {

@@ -60,7 +60,7 @@ export interface TimePeriodData {
 export interface PageData {
   page: string
   visitors: number
-  pageviews: number
+  pageViews: number
   [key: string]: string | number
 }
 
@@ -73,13 +73,13 @@ export interface SourceData {
 export interface EventData {
   event: string
   count: number
-  unique_users: number
+  uniqueUsers: number
   [key: string]: string | number
 }
 
 export interface StatsData {
   visitors: { value: number; change: number | null }
-  pageviews: { value: number; change: number | null }
+  pageViews: { value: number; change: number | null }
 }
 
 export interface PostHogData {
@@ -95,14 +95,14 @@ export interface PostHogData {
 // ============================================================================
 
 export interface DateRange {
-  date_from: string
-  date_to: string
+  dateFrom: string
+  dateTo: string
 }
 
 export interface TrendQuery {
   events: Array<{ id: string; math?: string }>
-  date_from: string
-  date_to: string
+  dateFrom: string
+  dateTo: string
   interval?: 'hour' | 'day' | 'week' | 'month'
   breakdown?: string
 }

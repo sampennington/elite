@@ -70,8 +70,8 @@ export const AnalyticsDashboard: React.FC = () => {
           />
           <AnalyticsCard
             title={'Page Views'}
-            value={stats.pageviews.value}
-            change={stats.pageviews.change}
+            value={stats.pageViews.value}
+            change={stats.pageViews.change}
             formatter={formatNumber}
             positiveIsGood={true}
           />
@@ -149,7 +149,7 @@ export const AnalyticsDashboard: React.FC = () => {
             columns={[
               { key: 'page', label: 'Page' },
               { key: 'visitors', label: 'Visitors', formatter: formatNumber },
-              { key: 'pageviews', label: 'Pageviews', formatter: formatNumber },
+              { key: 'pageViews', label: 'Pageviews', formatter: formatNumber },
             ]}
             rows={pages}
           />
@@ -169,7 +169,7 @@ export const AnalyticsDashboard: React.FC = () => {
             title="Custom Events"
             columns={[
               { key: 'event', label: 'Event' },
-              { key: 'unique_users', label: 'Unique Users', formatter: formatNumber },
+              { key: 'uniqueUsers', label: 'Unique Users', formatter: formatNumber },
               { key: 'count', label: 'Total Events', formatter: formatNumber },
             ]}
             rows={events}

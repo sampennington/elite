@@ -9,8 +9,7 @@ interface AnalyticsCardProps {
   positiveIsGood?: boolean
 }
 
-export const AnalyticsCard = (props: AnalyticsCardProps) => {
-  const { title, value, change, positiveIsGood, formatter } = props
+export const AnalyticsCard = ({ title, value, change, positiveIsGood, formatter }: AnalyticsCardProps) => {
   const formattedValue = formatter ? formatter(value) : value
   const changeData = formatChange(change || null)
   const isPositive = positiveIsGood ? changeData.isPositive : !changeData.isPositive
