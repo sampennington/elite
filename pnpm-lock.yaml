@@ -195,12 +195,6 @@ importers:
 
   ../payload-posthog-analytics:
     dependencies:
-      '@payloadcms/ui':
-        specifier: ^3.63.0
-        version: 3.67.0(@types/react@19.1.8)(monaco-editor@0.54.0)(next@15.4.4(@babel/core@7.28.4)(@playwright/test@1.54.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.60.0(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.3)
-      payload:
-        specifier: ^3.0.0
-        version: 3.60.0(graphql@16.12.0)(typescript@5.7.3)
       react:
         specifier: ^18.0.0 || ^19.0.0
         version: 19.1.0
@@ -211,6 +205,12 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react-is@18.3.1)(react@19.1.0)(redux@5.0.1)
     devDependencies:
+      '@payloadcms/next':
+        specifier: ^3.63.0
+        version: 3.67.0(@types/react@19.1.8)(graphql@16.12.0)(monaco-editor@0.54.0)(next@15.4.4(@babel/core@7.28.4)(@playwright/test@1.54.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.60.0(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.3)
+      '@payloadcms/ui':
+        specifier: ^3.63.0
+        version: 3.67.0(@types/react@19.1.8)(monaco-editor@0.54.0)(next@15.4.4(@babel/core@7.28.4)(@playwright/test@1.54.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.60.0(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.3)
       '@testing-library/jest-dom':
         specifier: ^6.9.1
         version: 6.9.1
@@ -235,6 +235,9 @@ importers:
       node-fetch:
         specifier: ^2.7.0
         version: 2.7.0
+      payload:
+        specifier: ^3.0.0
+        version: 3.60.0(graphql@16.12.0)(typescript@5.7.3)
       ts-jest:
         specifier: ^29.4.5
         version: 29.4.6(@babel/core@7.28.4)(@jest/transform@30.2.0)(@jest/types@30.2.0)(babel-jest@30.2.0(@babel/core@7.28.4))(esbuild@0.25.11)(jest-util@30.2.0)(jest@30.2.0(@types/node@22.5.4)(babel-plugin-macros@3.1.0)(esbuild-register@3.6.0(esbuild@0.25.11)))(typescript@5.7.3)
@@ -1762,6 +1765,13 @@ packages:
       graphql: ^16.8.1
       payload: 3.60.0
 
+  '@payloadcms/graphql@3.67.0':
+    resolution: {integrity: sha512-OTDfgsNwbEc6NRmLA4AK9gAnNYm/arWXektJvW/GcvNP+5oc0i/QcbteSBsEPkMlJm+jbsUpX1B04lT+w3uuFA==}
+    hasBin: true
+    peerDependencies:
+      graphql: ^16.8.1
+      payload: 3.67.0
+
   '@payloadcms/live-preview-react@3.60.0':
     resolution: {integrity: sha512-tzaoDfQoRICEnANNT/gbPKk72AqB9gbBal1f7VBgpW6zTUDM4L/ZuxBiHOKE53YNtZdUOeL5W2+22mqRdvtieQ==}
     peerDependencies:
@@ -1778,6 +1788,14 @@ packages:
       graphql: ^16.8.1
       next: ^15.2.3
       payload: 3.60.0
+
+  '@payloadcms/next@3.67.0':
+    resolution: {integrity: sha512-CrrqRn5t+HIsCNmt/Jkg7l3fDA/4MIrx7ZR7Q/LHKoEFo2qVb0tG0sFP48J/nFFjxQv7Mn4PhKeb7U6gxgG9JQ==}
+    engines: {node: ^18.20.2 || >=20.9.0}
+    peerDependencies:
+      graphql: ^16.8.1
+      next: ^15.4.8
+      payload: 3.67.0
 
   '@payloadcms/payload-cloud@3.60.0':
     resolution: {integrity: sha512-rD7EFTTjSTL3WawCRAvdqPkALpZQLmI+/tXw9A7joiVsHVULXQPzBYeWb5GnKZF3Nmp6FlVllAX6fsq+4UIulg==}
@@ -8617,6 +8635,17 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
+  '@payloadcms/graphql@3.67.0(graphql@16.12.0)(payload@3.60.0(graphql@16.12.0)(typescript@5.7.3))(typescript@5.7.3)':
+    dependencies:
+      graphql: 16.12.0
+      graphql-scalars: 1.22.2(graphql@16.12.0)
+      payload: 3.60.0(graphql@16.12.0)(typescript@5.7.3)
+      pluralize: 8.0.0
+      ts-essentials: 10.0.3(typescript@5.7.3)
+      tsx: 4.20.6
+    transitivePeerDependencies:
+      - typescript
+
   '@payloadcms/live-preview-react@3.60.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@payloadcms/live-preview': 3.60.0
@@ -8641,6 +8670,33 @@ snapshots:
       next: 15.4.4(@babel/core@7.28.4)(@playwright/test@1.54.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)
       path-to-regexp: 6.3.0
       payload: 3.60.0(graphql@16.11.0)(typescript@5.7.3)
+      qs-esm: 7.0.2
+      sass: 1.77.4
+      uuid: 10.0.0
+    transitivePeerDependencies:
+      - '@types/react'
+      - monaco-editor
+      - react
+      - react-dom
+      - supports-color
+      - typescript
+
+  '@payloadcms/next@3.67.0(@types/react@19.1.8)(graphql@16.12.0)(monaco-editor@0.54.0)(next@15.4.4(@babel/core@7.28.4)(@playwright/test@1.54.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.60.0(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.3)':
+    dependencies:
+      '@dnd-kit/core': 6.0.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@payloadcms/graphql': 3.67.0(graphql@16.12.0)(payload@3.60.0(graphql@16.12.0)(typescript@5.7.3))(typescript@5.7.3)
+      '@payloadcms/translations': 3.67.0
+      '@payloadcms/ui': 3.67.0(@types/react@19.1.8)(monaco-editor@0.54.0)(next@15.4.4(@babel/core@7.28.4)(@playwright/test@1.54.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.60.0(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.3)
+      busboy: 1.6.0
+      dequal: 2.0.3
+      file-type: 19.3.0
+      graphql: 16.12.0
+      graphql-http: 1.22.4(graphql@16.12.0)
+      graphql-playground-html: 1.6.30
+      http-status: 2.1.0
+      next: 15.4.4(@babel/core@7.28.4)(@playwright/test@1.54.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)
+      path-to-regexp: 6.3.0
+      payload: 3.60.0(graphql@16.12.0)(typescript@5.7.3)
       qs-esm: 7.0.2
       sass: 1.77.4
       uuid: 10.0.0
@@ -11336,6 +11392,10 @@ snapshots:
     dependencies:
       graphql: 16.11.0
 
+  graphql-http@1.22.4(graphql@16.12.0):
+    dependencies:
+      graphql: 16.12.0
+
   graphql-playground-html@1.6.30:
     dependencies:
       xss: 1.0.15
@@ -11343,6 +11403,11 @@ snapshots:
   graphql-scalars@1.22.2(graphql@16.11.0):
     dependencies:
       graphql: 16.11.0
+      tslib: 2.8.1
+
+  graphql-scalars@1.22.2(graphql@16.12.0):
+    dependencies:
+      graphql: 16.12.0
       tslib: 2.8.1
 
   graphql@16.11.0: {}
