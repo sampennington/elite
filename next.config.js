@@ -1,7 +1,24 @@
 import { withPayload } from '@payloadcms/next/withPayload'
-import { getAnalyticsRewrites } from './src/plugins/analytics/index.ts'
 
 import redirects from './redirects.js'
+
+// Inline analytics rewrites to avoid importing from workspace before Next.js starts
+const getAnalyticsRewrites = (options = {}) => {
+  const ingestPath = options?.ingestPath || '/ingest'
+  const posthogHost = options?.posthogHost || 'https://us.i.posthog.com'
+  const posthogAssetsHost = options?.posthogAssetsHost || 'https://us-assets.i.posthog.com'
+
+  return [
+    {
+      source: `${ingestPath}/static/:path*`,
+      destination: `${posthogAssetsHost}/static/:path*`,
+    },
+    {
+      source: `${ingestPath}/:path*`,
+      destination: `${posthogHost}/:path*`,
+    },
+  ]
+}
 
 const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`

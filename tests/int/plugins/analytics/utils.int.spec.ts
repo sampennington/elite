@@ -8,8 +8,8 @@ import {
   parseTimeseries,
   getTotalVisitors,
   extractAggregatedValue,
-} from '@/plugins/analytics/lib/utils'
-import type { PostHogTrendResponse, TimePeriodData } from '@/plugins/analytics/lib/posthog.types'
+} from 'payload-posthog-analytics/lib/utils'
+import type { PostHogTrendResponse, TimePeriodData } from 'payload-posthog-analytics/lib/posthog.types'
 
 describe('getDateRange', () => {
   it('should return date range for last 24 hours', () => {
